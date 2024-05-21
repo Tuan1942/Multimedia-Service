@@ -270,3 +270,4 @@ D:\source\Visual Studio 2022\MultimediaService\obj\Debug\net8.0\refint\Multimedi
 D:\source\Visual Studio 2022\MultimediaService\obj\Debug\net8.0\MultimediaService.pdb
 D:\source\Visual Studio 2022\MultimediaService\obj\Debug\net8.0\MultimediaService.genruntimeconfig.cache
 D:\source\Visual Studio 2022\MultimediaService\obj\Debug\net8.0\ref\MultimediaService.dll
+D:\source\Visual Studio 2022\MultimediaService\obj\Debug\net8.0\MultimediaService.sourcelink.json

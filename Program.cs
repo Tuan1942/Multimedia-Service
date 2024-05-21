@@ -9,6 +9,8 @@ builder.Services.AddControllersWithViews();
 // Configure DbContext with SQL Server
 builder.Services.AddDbContext<MultimediaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<UserContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
