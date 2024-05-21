@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Player</title>
+</head>
+<body>
+    <h1>Media Player</h1>
+
+    <!-- Video Player -->
+    <h2>Video Player</h2>
+    <video id="videoPlayer" controls width="320" height="240"></video>
+
+    <!-- Image Display -->
+    <h2>Image Display</h2>
+    <img id="imageDisplay" width="320" height="240" alt="Loaded Image" />
+
+    <!-- Audio Player -->
+    <h2>Audio Player</h2>
+    <audio id="audioPlayer" controls></audio>
+
+    <script>
+        async function loadVideo() {
+            try {
+                const fileName = "3620579632.mp4";
+                const response = await fetch(`/api/video/get/${fileName}`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to load video');
+                }
+
+                const blob = await response.blob();
+                const videoPlayer = document.getElementById('videoPlayer');
+                videoPlayer.src = URL.createObjectURL(blob);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function loadImage() {
+            try {
+                const fileName = "20240520100756364485.png"; // Thay thế bằng tên tệp ảnh của bạn
+                const response = await fetch(`/api/image/get/${fileName}`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to load image');
+                }
+
+                const blob = await response.blob();
+                const imageDisplay = document.getElementById('imageDisplay');
+                imageDisplay.src = URL.createObjectURL(blob);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function loadAudio() {
+            try {
+                const fileName = "8416637917.wav"; // Thay thế bằng tên tệp âm thanh của bạn
+                const response = await fetch(`/api/audio/get/${fileName}`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to load audio');
+                }
+
+                const blob = await response.blob();
+                const audioPlayer = document.getElementById('audioPlayer');
+                audioPlayer.src = URL.createObjectURL(blob);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        window.onload = () => {
+            loadVideo();
+            loadImage();
+            loadAudio();
+        };
+    </script>
+</body>
+</html>
