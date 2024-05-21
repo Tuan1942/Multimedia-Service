@@ -4,8 +4,9 @@ using MultimediaService.Services;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using static MultimediaService.Context.MultimediaContext;
 
-namespace MediaService.Controllers
+namespace MultimediaService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -14,10 +15,12 @@ namespace MediaService.Controllers
         private readonly string _targetFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Multimedia\\Images");
         private readonly string _compressedFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Compressed\\Images");
         private readonly MultimediaContext _context;
+        private string Type;
 
         public ImageController(MultimediaContext context)
         {
             _context = context;
+            Type = this.GetType().Name.Replace("Controller", ""); 
 
             if (!Directory.Exists(_targetFilePath))
             {
@@ -78,6 +81,16 @@ namespace MediaService.Controllers
             };
 
             _context.Images.Add(imageEntity);
+            await _context.SaveChangesAsync();
+
+            var message = new Message
+            {
+                Type = Type,
+                Value = imageEntity.Id.ToString(),
+                SentTime = DateTime.Now
+            };
+
+            _context.Messages.Add(message);
             await _context.SaveChangesAsync();
 
             return Ok(new { Id = imageEntity.Id, FileName = fileName, FilePath = filePath, CompressedFilePath = compressedFilePath });

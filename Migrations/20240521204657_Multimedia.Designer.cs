@@ -12,8 +12,8 @@ using MultimediaService.Context;
 namespace MultimediaService.Migrations
 {
     [DbContext(typeof(MultimediaContext))]
-    [Migration("20240521113606_MultimediaMigration")]
-    partial class MultimediaMigration
+    [Migration("20240521204657_Multimedia")]
+    partial class Multimedia
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,6 +79,36 @@ namespace MultimediaService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("MultimediaService.Context.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ReceiveId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SendId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SentTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("MultimediaService.Context.Video", b =>

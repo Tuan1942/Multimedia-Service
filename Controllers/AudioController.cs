@@ -4,6 +4,7 @@ using MultimediaService.Services;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using static MultimediaService.Context.MultimediaContext;
 
 namespace MultimediaService.Controllers
 {
@@ -14,10 +15,12 @@ namespace MultimediaService.Controllers
         private readonly string _targetFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Multimedia\\Audios");
         private readonly string _compressedFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Compressed\\Audios");
         private readonly MultimediaContext _context;
+        private string Type;
 
         public AudioController(MultimediaContext context)
         {
             _context = context;
+            Type = this.GetType().Name.Replace("Controller", "");
 
             if (!Directory.Exists(_targetFilePath))
             {
@@ -78,6 +81,16 @@ namespace MultimediaService.Controllers
             };
 
             _context.Audios.Add(audioEntity);
+            await _context.SaveChangesAsync();
+
+            var message = new Message
+            {
+                Type = Type,
+                Value = audioEntity.Id.ToString(),
+                SentTime = DateTime.Now
+            };
+
+            _context.Messages.Add(message);
             await _context.SaveChangesAsync();
 
             return Ok(new { Id = audioEntity.Id, FileName = fileName, FilePath = filePath, CompressedFilePath = compressedFilePath });

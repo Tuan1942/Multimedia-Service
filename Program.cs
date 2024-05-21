@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient(); //**//
 
 // Configure DbContext with SQL Server
 builder.Services.AddDbContext<MultimediaContext>(options =>
