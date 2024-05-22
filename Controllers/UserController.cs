@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MultimediaService.Context;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -12,13 +15,15 @@ namespace MultimediaService.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserContext _context;
+        private readonly IConfiguration _configuration;
 
-        public UserController(UserContext context)
+        public UserController(UserContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
-        [HttpPost("register")] //http://localhost:3000/api/user/register
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] User user)
         {
             if (await _context.Users.AnyAsync(u => u.Username == user.Username))
@@ -41,23 +46,46 @@ namespace MultimediaService.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User user)
+        public async Task<IActionResult> Login([FromBody] User loginRequest)
         {
-            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
-            if (dbUser == null || !VerifyPassword(user.PasswordHash, dbUser.PasswordHash))
+            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == loginRequest.Username);
+            if (dbUser == null || !VerifyPassword(loginRequest.PasswordHash, dbUser.PasswordHash))
             {
                 return Unauthorized("Invalid username or password.");
             }
 
-            // Need add token.
-            return Ok("Login successful.");
+            var token = GenerateJwtToken(dbUser);
+            return Ok(new { Token = token });
         }
 
-        [HttpPost("logout")]
-        public IActionResult Logout()
+        [HttpGet("current")]
+        [Authorize]
+        public IActionResult GetCurrentUser()
         {
-            // Need proper session or token invalidation.
-            return Ok("Logout successful.");
+            var username = User.Identity.Name;
+            var user = _context.Users.SingleOrDefault(u => u.Username == username);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+            return Ok(new { user.Id, user.Username, user.Email });
+        }
+
+        private string GenerateJwtToken(User user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:SecretKey"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.Username)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
         private string HashPassword(string password)
