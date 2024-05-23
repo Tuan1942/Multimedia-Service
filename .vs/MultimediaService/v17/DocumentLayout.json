@@ -3,32 +3,20 @@
   "WorkspaceRootPath": "D:\\source\\Visual Studio 2022\\MultimediaService\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\context\\usercontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:context\\usercontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\controllers\\videocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:controllers\\videocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\controllers\\audiocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:controllers\\audiocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,97 +26,58 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAWAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-05-22T01:20:56.22Z",
+              "DocumentIndex": 1,
+              "Title": "UserContext.cs",
+              "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Context\\UserContext.cs",
+              "RelativeDocumentMoniker": "Context\\UserContext.cs",
+              "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\Context\\UserContext.cs",
+              "RelativeToolTip": "Context\\UserContext.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAgAAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-23T02:23:32.872Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AQIAABEAAAAAAAAAAAAnwBUAAAAAAAAA",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAACcAAAAjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-22T01:17:25.019Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "UserController.cs",
               "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "Controllers\\UserController.cs",
               "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\UserController.cs",
               "RelativeToolTip": "Controllers\\UserController.cs",
-              "ViewState": "AQIAAEUAAAAAAAAAAAAkwD0AAAATAAAA",
+              "ViewState": "AQIAAEMAAAAAAAAAAAAQwEwAAAAOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-22T01:17:52.372Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MessageController.cs",
-              "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\MessageController.cs",
-              "RelativeDocumentMoniker": "Controllers\\MessageController.cs",
-              "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\MessageController.cs",
-              "RelativeToolTip": "Controllers\\MessageController.cs",
-              "ViewState": "AQIAABsAAAAAAAAAAAAYwAYAAAAdAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-21T20:22:15.862Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "VideoController.cs",
-              "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\VideoController.cs",
-              "RelativeDocumentMoniker": "Controllers\\VideoController.cs",
-              "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\VideoController.cs",
-              "RelativeToolTip": "Controllers\\VideoController.cs",
-              "ViewState": "AQIAAFAAAAAAAAAAAAAgwFsAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-21T20:16:15.668Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ImageController.cs",
-              "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\ImageController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ImageController.cs",
-              "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\ImageController.cs",
-              "RelativeToolTip": "Controllers\\ImageController.cs",
-              "ViewState": "AQIAAEoAAAAAAAAAAAAuwFUAAAAlAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-21T20:16:10.351Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "AudioController.cs",
-              "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\AudioController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AudioController.cs",
-              "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\AudioController.cs",
-              "RelativeToolTip": "Controllers\\AudioController.cs",
-              "ViewState": "AQIAAE0AAAAAAAAAAAAuwFsAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-21T20:15:19.073Z",
+              "DocumentIndex": 3,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Properties\\launchSettings.json",
+              "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Properties\\launchSettings.json",
+              "ViewState": "AQIAAAIAAAAAAAAAAAAUwA8AAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-05-22T02:42:13.597Z",
               "EditorCaption": ""
             }
           ]

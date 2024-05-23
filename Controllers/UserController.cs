@@ -54,38 +54,81 @@ namespace MultimediaService.Controllers
                 return Unauthorized("Invalid username or password.");
             }
 
-            var token = GenerateJwtToken(dbUser);
+            var token = GenerateJwtToken(dbUser, _configuration);
             return Ok(new { Token = token });
+        }
+
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+            var jwtToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
+            if (jwtToken == null)
+            {
+                return BadRequest("Invalid token.");
+            }
+
+            var blacklistToken = new TokenBlacklist
+            {
+                Token = token,
+                Expiration = jwtToken.ValidTo
+            };
+
+            _context.TokenBlacklists.Add(blacklistToken);
+            await _context.SaveChangesAsync();
+
+            return Ok("Logout successful.");
         }
 
         [HttpGet("current")]
         [Authorize]
-        public IActionResult GetCurrentUser()
+        public async Task<IActionResult> GetCurrentUser()
         {
-            var username = User.Identity.Name;
-            var user = _context.Users.SingleOrDefault(u => u.Username == username);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                return NotFound("User not found!");
+            }
+
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                return BadRequest("Invalid user ID format.");
+            }
+
+            var user = await _context.Users.FindAsync(userId);
+
             if (user == null)
             {
-                return NotFound("User not found.");
+                return NotFound("User not found!");
             }
+
             return Ok(new { user.Id, user.Username, user.Email });
         }
 
-        private string GenerateJwtToken(User user)
+        public string GenerateJwtToken(User user, IConfiguration configuration)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:SecretKey"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Username)
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                //new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+                //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Use UserID as NameIdentifier
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+
+            var token = new JwtSecurityToken(
+                issuer: configuration["Jwt:Issuer"],
+                audience: configuration["Jwt:Audience"],
+                claims: claims,
+                notBefore: DateTime.UtcNow,
+                expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         private string HashPassword(string password)

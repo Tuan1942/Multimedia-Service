@@ -12,7 +12,7 @@ using MultimediaService.Context;
 namespace MultimediaService.Migrations.User
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20240521130331_User")]
+    [Migration("20240523015415_User")]
     partial class User
     {
         /// <inheritdoc />
@@ -24,6 +24,26 @@ namespace MultimediaService.Migrations.User
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("MultimediaService.Context.TokenBlacklist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TokenBlacklists");
+                });
 
             modelBuilder.Entity("MultimediaService.Context.User", b =>
                 {
