@@ -19,22 +19,7 @@ namespace MultimediaService.Controllers
 
         public async Task<IActionResult> IndexAsync()
         {
-            var viewModel = new UserView();
-            if (User.Identity.IsAuthenticated)
-            {
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (int.TryParse(userIdClaim, out var userId))
-                {
-                    var user = await _userContext.Users.FindAsync(userId);
-                    if (user != null)
-                    {
-                        viewModel.Username = user.Username;
-                        viewModel.Email = user.Email;
-                    }
-                }
-            }
-
-            return View(viewModel);
+            return View();
         }
         public IActionResult Login()
         {

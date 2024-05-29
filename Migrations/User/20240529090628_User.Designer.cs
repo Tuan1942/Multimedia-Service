@@ -12,7 +12,7 @@ using MultimediaService.Context;
 namespace MultimediaService.Migrations.User
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20240523015415_User")]
+    [Migration("20240529090628_User")]
     partial class User
     {
         /// <inheritdoc />
@@ -25,26 +25,6 @@ namespace MultimediaService.Migrations.User
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MultimediaService.Context.TokenBlacklist", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Expiration")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TokenBlacklists");
-                });
-
             modelBuilder.Entity("MultimediaService.Context.User", b =>
                 {
                     b.Property<int>("Id")
@@ -55,10 +35,6 @@ namespace MultimediaService.Migrations.User
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()

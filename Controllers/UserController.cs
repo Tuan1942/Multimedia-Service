@@ -28,28 +28,31 @@ namespace MultimediaService.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromForm] RegisterModel registerDto)
+        public async Task<IActionResult> Register([FromForm] RegisterModel registerModel)
         {
-            if (await _context.Users.AnyAsync(u => u.Username == registerDto.Username))
+            if (await _context.Users.AnyAsync(u => u.Username == registerModel.Username))
             {
                 return BadRequest("Username already exists.");
             }
 
-            if (await _context.Users.AnyAsync(u => u.Email == registerDto.Email))
-            {
-                return BadRequest("Email already registered.");
-            }
-
             var user = new User
             {
-                Username = registerDto.Username,
-                Email = registerDto.Email,
-                PasswordHash = HashPassword(registerDto.Password),
+                Username = registerModel.Username,
+                PasswordHash = HashPassword(registerModel.Password),
                 CreatedAt = DateTime.Now
             };
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+
+            //Login after Register
+            var token = GenerateJwtToken(user, _configuration);
+            HttpContext.Response.Cookies.Append("jwtToken", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            });
 
             return RedirectToAction("Index", "Home");
         }
@@ -78,8 +81,7 @@ namespace MultimediaService.Controllers
         public async Task<IActionResult> Logout()
         {
             var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-
-            var jwtToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
+                        var jwtToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
             if (jwtToken == null)
             {
                 return BadRequest("Invalid token.");
@@ -121,7 +123,7 @@ namespace MultimediaService.Controllers
                 return NotFound("User not found!");
             }
 
-            return Ok(new { user.Id, user.Username, user.Email });
+            return Ok(new { user.Id, user.Username });
         }
 
         private string HashPassword(string password)
