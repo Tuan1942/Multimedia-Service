@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -7,10 +9,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using MultimediaService.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace MultimediaService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -24,38 +28,49 @@ namespace MultimediaService.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] User user)
+        public async Task<IActionResult> Register([FromForm] RegisterModel registerDto)
         {
-            if (await _context.Users.AnyAsync(u => u.Username == user.Username))
+            if (await _context.Users.AnyAsync(u => u.Username == registerDto.Username))
             {
                 return BadRequest("Username already exists.");
             }
 
-            if (await _context.Users.AnyAsync(u => u.Email == user.Email))
+            if (await _context.Users.AnyAsync(u => u.Email == registerDto.Email))
             {
                 return BadRequest("Email already registered.");
             }
 
-            user.PasswordHash = HashPassword(user.PasswordHash);
-            user.CreatedAt = DateTime.Now;
+            var user = new User
+            {
+                Username = registerDto.Username,
+                Email = registerDto.Email,
+                PasswordHash = HashPassword(registerDto.Password),
+                CreatedAt = DateTime.Now
+            };
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return Ok(new { user.Id, user.Username, user.Email });
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User loginRequest)
+        public async Task<IActionResult> Login([FromForm] LoginModel loginModel)
         {
-            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == loginRequest.Username);
-            if (dbUser == null || !VerifyPassword(loginRequest.PasswordHash, dbUser.PasswordHash))
+            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == loginModel.Username);
+            if (dbUser == null || !VerifyPassword(loginModel.Password, dbUser.PasswordHash))
             {
                 return Unauthorized("Invalid username or password.");
             }
 
             var token = GenerateJwtToken(dbUser, _configuration);
-            return Ok(new { Token = token });
+            HttpContext.Response.Cookies.Append("jwtToken", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict
+            });
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost("logout")]
@@ -69,7 +84,7 @@ namespace MultimediaService.Controllers
             {
                 return BadRequest("Invalid token.");
             }
-
+            /*
             var blacklistToken = new TokenBlacklist
             {
                 Token = token,
@@ -78,8 +93,9 @@ namespace MultimediaService.Controllers
 
             _context.TokenBlacklists.Add(blacklistToken);
             await _context.SaveChangesAsync();
-
-            return Ok("Logout successful.");
+            */
+            HttpContext.Response.Cookies.Delete("jwtToken");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet("current")]
@@ -108,29 +124,6 @@ namespace MultimediaService.Controllers
             return Ok(new { user.Id, user.Username, user.Email });
         }
 
-        public string GenerateJwtToken(User user, IConfiguration configuration)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
-            {
-                //new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-                //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Use UserID as NameIdentifier
-            };
-
-            var token = new JwtSecurityToken(
-                issuer: configuration["Jwt:Issuer"],
-                audience: configuration["Jwt:Audience"],
-                claims: claims,
-                notBefore: DateTime.UtcNow,
-                expires: DateTime.UtcNow.AddHours(1),
-                signingCredentials: credentials);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
         private string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
@@ -145,5 +138,28 @@ namespace MultimediaService.Controllers
             var enteredHash = HashPassword(enteredPassword);
             return enteredHash == storedHash;
         }
+
+        public string GenerateJwtToken(User user, IConfiguration configuration)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+        new Claim(ClaimTypes.Name, user.Username), // Add user's name as a claim
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Use UserID as NameIdentifier
+    };
+
+            var token = new JwtSecurityToken(
+                issuer: configuration["Jwt:Issuer"],
+                audience: configuration["Jwt:Audience"],
+                claims: claims,
+                notBefore: DateTime.UtcNow,
+                expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
     }
 }

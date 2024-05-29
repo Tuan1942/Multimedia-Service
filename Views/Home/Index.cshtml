@@ -40,8 +40,8 @@
 
         async function loadImage() {
             try {
-                const fileName = "20240520100756364485.png"; // Thay thế bằng tên tệp ảnh của bạn
-                const response = await fetch(`/api/image/get/${fileName}`);
+                const fileName = "3"; // Thay thế bằng tên tệp ảnh của bạn
+                const response = await fetch(`/image/${fileName}`);
 
                 if (!response.ok) {
                     throw new Error('Failed to load image');

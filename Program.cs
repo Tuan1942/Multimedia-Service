@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MultimediaService.Context;
+using MultimediaService.Cookie;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
@@ -39,9 +40,10 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true, 
         ClockSkew = TimeSpan.Zero  
     };
-});
+}).AddCookie();
 
 var app = builder.Build();
+app.UseMiddleware<JwtCookieMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
