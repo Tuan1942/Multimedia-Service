@@ -1,82 +1,166 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Player</title>
-</head>
-<body>
-    <h1>Media Player</h1>
+﻿@model Home
+@using System.Security.Claims
+@{
+    var currentUserId = Model.HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+}
+<div class="container-fluid position-relative">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="">
+                <h5 class="modal-title" id="chatModalLabel">Chat with <span id="chatUser"></span></h5>
+            </div>
+            <div class="modal-body">
+                <!-- Chat content goes here -->
+                <div id="chatContent" style="height: 70vh; overflow-y: auto;">
+                    <div id="message-container">
+                        <h2>Messages</h2>
+                        <div class="message-container" id="messages-list"></div>
+                    </div>
+                </div>
+                <form class="input-group mt-3" asp-controller="Message" asp-action="Send" method="post">
+                    <input type="hidden" id="SendId" name="SendId" value="@currentUserId">
+                    <input type="hidden" id="ReceiveId" name="ReceiveId" value="">
+                    <input type="hidden" id="Type" name="Type" value="Message">
+                    <input type="text" id="Value" name="Value" class="form-control" placeholder="Type a message">
+                    <button id="send-message" class="btn btn-primary" type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="position-fixed" style="top: 70px; bottom: 0; width: 25%;">
+                @if (Model != null && Model.Users != null)
+                {
+                    <h2>Danh sách liên hệ:</h2>
+                    <div class="overflow-auto" style="height: 80vh;">
+                        <div class="list-group">
+                            @foreach (var user in Model.Users)
+                            {
+                                <a href="#" data-id="@user.Id" class="list-group-item list-group-item-action user-item" onclick="openChat('@user.Username')">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">@user.Username</h5>
+                                    </div>
+                                    <small class="text-muted">Joined on: @user.CreatedAt.ToString("MMMM dd, yyyy")</small>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p>No users found.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- Video Player -->
-    <h2>Video Player</h2>
-    <video id="videoPlayer" controls width="320" height="240"></video>
+@section Styles {
+    <style>
+        .message-container {
+            display: flex;
+            flex-direction: column;
+        }
 
-    <!-- Image Display -->
-    <h2>Image Display</h2>
-    <img id="imageDisplay" width="320" height="240" alt="Loaded Image" />
+        #messages-list {
+            overflow-x: hidden;
+            padding: 10px;
+        }
 
-    <!-- Audio Player -->
-    <h2>Audio Player</h2>
-    <audio id="audioPlayer" controls></audio>
+        .message {
+            margin-bottom: 10px;
+            width: 70%;
+            padding: 10px;
+            border-radius: 10px;
+        }
 
+            .message.sent {
+                background-color: #d1ffd6;
+                align-self: flex-start;
+            }
+
+            .message.received {
+                background-color: #e8e8e8;
+                align-self: flex-end;
+                text-align: left;
+            }
+
+            .message img, .message video {
+                max-width: 100%;
+                height: auto;
+                display: block;
+                margin: 0 auto;
+            }
+
+        .modal-header {
+            margin-top: 70px; /* Adjust based on your fixed header height */
+        }
+    </style>
+}
+
+@section Scripts {
     <script>
-        async function loadVideo() {
-            try {
-                const fileName = "3620579632.mp4";
-                const response = await fetch(`/api/video/get/${fileName}`);
+        $(document).ready(function () {
+            var currentUserId = '@currentUserId';
 
-                if (!response.ok) {
-                    throw new Error('Failed to load video');
-                }
+            function appendMessages(messages) {
+                messages.forEach(function (message) {
+                    var messageHtml = '';
+                    var isSent = message.sendId == currentUserId;
 
-                const blob = await response.blob();
-                const videoPlayer = document.getElementById('videoPlayer');
-                videoPlayer.src = URL.createObjectURL(blob);
-            } catch (error) {
-                console.error(error);
+                    if (message.type === 'Image') {
+                        var imageUrl = message.value;
+                        messageHtml = `<div class="message ${isSent ? 'sent' : 'received'}"><img src="/Image/${imageUrl}" alt="Image" /><div class="message-time">${message.sentTime}</div></div>`;
+                    } else if (message.type === 'Audio') {
+                        var audioUrl = message.value;
+                        messageHtml = `<div class="message ${isSent ? 'sent' : 'received'}"><audio controls><source src="/Audio/${audioUrl}" type="audio/mpeg">Your browser does not support the audio element.</audio><div class="message-time">${message.sentTime}</div></div>`;
+                    } else if (message.type === 'Video') {
+                        var videoUrl = message.value;
+                        messageHtml = `<div class="message ${isSent ? 'sent' : 'received'}"><video controls><source src="/Video/${videoUrl}" type="video/mp4">Your browser does not support the video element.</video><div class="message-time">${message.sentTime}</div></div>`;
+                    } else {
+                        messageHtml = `<div class="message ${isSent ? 'sent' : 'received'}">${message.value}<div class="message-time">${message.sentTime}</div></div>`;
+                    }
+
+                    $('#messages-list').append(messageHtml);
+                });
             }
-        }
 
-        async function loadImage() {
-            try {
-                const fileName = "3"; // Thay thế bằng tên tệp ảnh của bạn
-                const response = await fetch(`/image/${fileName}`);
+            $('.user-item').click(function () {
+                var userId = $(this).data('id');
+                $('.user-item').removeClass('active');
+                $(this).addClass('active');
+                $('#chatUser').text($(this).text());
 
-                if (!response.ok) {
-                    throw new Error('Failed to load image');
+                var inputElement = document.getElementById("ReceiveId");
+                inputElement.value = userId;
+
+                $.ajax({
+                    url: `/Message/?sendId=${currentUserId}&receiveId=${userId}`,
+                    method: 'GET',
+                    success: function (data) {
+                        $('#messages-list').empty();
+
+                        // Append messages
+                        appendMessages(data);
+                    }
+                });
+            });
+
+            $('#send-message').click(function () {
+                var userId = $('.user-item.active').data('id');
+                var messageText = $('#Value').val();
+                if (messageText && userId) {
+                    $.ajax({
+                        url: '/Message/Send',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ sendId: currentUserId, receiveId: userId, type: 'Text', value: messageText }),
+                        success: function () {
+                            $('#Value').val('');
+                            $('.user-item.active').click();  // Refresh the message list
+                        }
+                    });
                 }
-
-                const blob = await response.blob();
-                const imageDisplay = document.getElementById('imageDisplay');
-                imageDisplay.src = URL.createObjectURL(blob);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        async function loadAudio() {
-            try {
-                const fileName = "8416637917.wav"; // Thay thế bằng tên tệp âm thanh của bạn
-                const response = await fetch(`/api/audio/get/${fileName}`);
-
-                if (!response.ok) {
-                    throw new Error('Failed to load audio');
-                }
-
-                const blob = await response.blob();
-                const audioPlayer = document.getElementById('audioPlayer');
-                audioPlayer.src = URL.createObjectURL(blob);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        window.onload = () => {
-            loadVideo();
-            loadImage();
-            loadAudio();
-        };
+            });
+        });
     </script>
-</body>
-</html>
+}

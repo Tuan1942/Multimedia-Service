@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MultimediaService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class MessageController : ControllerBase
     {
@@ -21,15 +21,13 @@ namespace MultimediaService.Controllers
             Type = GetType().Name.Replace("Controller", "");
         }
 
-        // GET: api/message
-        [HttpGet]
+        [HttpGet("All")]
         public async Task<IActionResult> GetMessages()
         {
             var messages = await _context.Messages.ToListAsync();
             return Ok(messages);
         }
 
-        // GET: api/message/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMessage(int id)
         {
@@ -41,9 +39,17 @@ namespace MultimediaService.Controllers
             return Ok(message);
         }
 
-        // POST: api/message
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Message>>> GetMessagesBySenderReceiver(int sendId, int receiveId)
+        {
+            var messages = await _context.Messages
+                .Where(m => (m.SendId == sendId && m.ReceiveId == receiveId) || (m.SendId == receiveId && m.ReceiveId == sendId))
+                .ToListAsync();
+            return Ok(messages);
+        }
+
         [HttpPost]
-        public async Task<IActionResult> CreateMessage([FromBody] Message message)
+        public async Task<IActionResult> Send([FromForm] Message message)
         {
             if (message == null)
             {
@@ -59,10 +65,9 @@ namespace MultimediaService.Controllers
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetMessage), new { id = message.Id }, message);
+            return NoContent();
         }
 
-        // DELETE: api/message/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMessage(int id)
         {

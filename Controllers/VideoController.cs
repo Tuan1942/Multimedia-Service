@@ -8,7 +8,7 @@ using static MultimediaService.Context.MultimediaContext;
 
 namespace MultimediaService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class VideoController : ControllerBase
     {

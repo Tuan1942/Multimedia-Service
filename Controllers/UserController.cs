@@ -78,10 +78,10 @@ namespace MultimediaService.Controllers
 
         [HttpPost("logout")]
         [Authorize]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
             var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                        var jwtToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
+            var jwtToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
             if (jwtToken == null)
             {
                 return BadRequest("Invalid token.");
@@ -163,5 +163,20 @@ namespace MultimediaService.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        [HttpGet("list")]
+        [Authorize]
+        public async Task<IActionResult> GetListUser()
+        {
+            var currentUsername = User.Identity.Name;
+            var userList = await _context.Users
+                .Where(u => u.Username != currentUsername)
+                .Select(u => new {
+                    u.Id,
+                    u.Username,
+                    u.CreatedAt
+                })
+                .ToListAsync();
+            return Ok(userList);
+        }
     }
 }
