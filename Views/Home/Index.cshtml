@@ -3,58 +3,12 @@
 @{
     var currentUserId = Model.HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 }
-<div class="container-fluid position-relative">
-    <div class="row">
-        <div class="col-md-9">
-            <div class="">
-                <h5 class="modal-title" id="chatModalLabel">Chat with <span id="chatUser"></span></h5>
-            </div>
-            <div class="modal-body">
-                <!-- Chat content goes here -->
-                <div id="chatContent" style="height: 70vh; overflow-y: auto;">
-                    <div id="message-container">
-                        <h2>Messages</h2>
-                        <div class="message-container" id="messages-list"></div>
-                    </div>
-                </div>
-                <div class="input-group mt-3" asp-controller="Message" asp-action="Send" method="post">
-                    <input type="hidden" id="SendId" name="SendId" value="@currentUserId">
-                    <input type="hidden" id="ReceiveId" name="ReceiveId" value="">
-                    <input type="hidden" id="Type" name="Type" value="Message">
-                    <input type="text" id="Value" name="Value" class="form-control" placeholder="Type a message">
-                    <button id="send-message" class="btn btn-primary" type="button">Send</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="position-fixed" style="top: 70px; bottom: 0; width: 25%;">
-                @if (Model != null && Model.Users != null)
-                {
-                    <h2>Danh sách liên hệ:</h2>
-                    <div class="overflow-auto" style="height: 80vh;">
-                        <div class="list-group">
-                            @foreach (var user in Model.Users)
-                            {
-                                <a href="#" data-id="@user.Id" class="list-group-item list-group-item-action user-item" onclick="openChat('@user.Username')">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h5 class="mb-1">@user.Username</h5>
-                                    </div>
-                                    <small class="text-muted">Joined on: @user.CreatedAt.ToString("MMMM dd, yyyy")</small>
-                                </a>
-                            }
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <p>No users found.</p>
-                }
-            </div>
-        </div>
-    </div>
-</div>
-
-@section Styles {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Renew Messages</title>
     <style>
         .message-container {
             display: flex;
@@ -95,81 +49,149 @@
             margin-top: 70px; /* Adjust based on your fixed header height */
         }
     </style>
-}
-
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            var currentUserId = '@currentUserId';
-
-            function appendMessages(messages) {
-                messages.forEach(function (message) {
-                    var messageHtml = '';
-                    var isSent = message.sendId == currentUserId;
-
-                    if (message.type === 'Image') {
-                        var imageUrl = message.value;
-                        messageHtml = `<div class="message ${isSent ? 'sent' : 'received'}"><img src="/Image/${imageUrl}" alt="Image" /><div class="message-time">${message.sentTime}</div></div>`;
-                    } else if (message.type === 'Audio') {
-                        var audioUrl = message.value;
-                        messageHtml = `<div class="message ${isSent ? 'sent' : 'received'}"><audio controls><source src="/Audio/${audioUrl}" type="audio/mpeg">Your browser does not support the audio element.</audio><div class="message-time">${message.sentTime}</div></div>`;
-                    } else if (message.type === 'Video') {
-                        var videoUrl = message.value;
-                        messageHtml = `<div class="message ${isSent ? 'sent' : 'received'}"><video controls><source src="/Video/${videoUrl}" type="video/mp4">Your browser does not support the video element.</video><div class="message-time">${message.sentTime}</div></div>`;
-                    } else {
-                        messageHtml = `<div class="message ${isSent ? 'sent' : 'received'}">${message.value}<div class="message-time">${message.sentTime}</div></div>`;
+</head>
+<body>
+    <div class="container-fluid position-relative">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="">
+                    <h5 class="modal-title" id="chatModalLabel">Chat with <span id="chatUser"></span></h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Chat content goes here -->
+                    <div id="chatContent" style="height: 70vh; overflow-y: auto;">
+                        <div id="message-container">
+                            <h2>Messages</h2>
+                            <div class="message-container" id="messages-list"></div>
+                        </div>
+                    </div>
+                    <div class="input-group mt-3" asp-controller="Message" asp-action="Send" method="post">
+                        <input type="hidden" id="SendId" name="SendId" value="@currentUserId">
+                        <input type="hidden" id="ReceiveId" name="ReceiveId" value="">
+                        <input type="hidden" id="Type" name="Type" value="Message">
+                        <input type="text" id="Value" name="Value" class="form-control" placeholder="Type a message">
+                        <button id="send-message" class="btn btn-primary" type="button">Send</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="position-fixed" style="top: 70px; bottom: 0; width: 25%;">
+                    @if (Model != null && Model.Users != null)
+                    {
+                        <h2>Danh sách liên hệ:</h2>
+                        <div class="overflow-auto" style="height: 80vh;">
+                            <div class="list-group">
+                                @foreach (var user in Model.Users)
+                                {
+                                    <a href="#" data-id="@user.Id" class="list-group-item list-group-item-action user-item" onclick="openChat('@user.Username')">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">@user.Username</h5>
+                                        </div>
+                                        <small class="text-muted">Joined on: @user.CreatedAt.ToString("MMMM dd, yyyy")</small>
+                                    </a>
+                                }
+                            </div>
+                        </div>
                     }
-
-                    $('#messages-list').append(messageHtml);
-                    const chatContent = document.getElementById('chatContent');
-                    chatContent.scrollTop = chatContent.scrollHeight;
-                });
-            }
-
-            $('.user-item').click(function () {
-                var userId = $(this).data('id');
-                $('.user-item').removeClass('active');
-                $(this).addClass('active');
-                $('#chatUser').text($(this).text());
-
-                var inputElement = document.getElementById("ReceiveId");
-                inputElement.value = userId;
-
-                $.ajax({
-                    url: `/Message/?sendId=${currentUserId}&receiveId=${userId}`,
-                    method: 'GET',
-                    success: function (data) {
-                        $('#messages-list').empty();
-
-                        // Append messages
-                        appendMessages(data);
+                    else
+                    {
+                        <p>No users found.</p>
                     }
-                });
-            });
+                </div>
+            </div>
+        </div>
+    </div>
 
-            $('#send-message').click(function () {
-                var messageValue = $('#Value').val();
-                var receiveId = $('#ReceiveId').val();
-                var type = $('#Type').val();
+    @section Scripts {
+        <script>
+            $(document).ready(function () {
+                var currentUserId = '@currentUserId';
+                var currentChatUserId = null;
 
-                if (messageValue && receiveId) {
-                    $.ajax({
-                        url: '/Message/SendMessage ',
-                        method: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({
-                            sendId: currentUserId,
-                            receiveId: receiveId,
-                            type: type,
-                            value: messageValue
-                        }),
-                        success: function () {
-                            $('#Value').val('');
-                            $('.user-item.active').click();
+                function appendMessages(messages) {
+                    messages.forEach(function (message) {
+                        var messageHtml = '';
+                        var isSent = message.sendId == currentUserId;
+
+                        if (message.type === 'Image') {
+                            var imageUrl = message.value;
+                            messageHtml = `<div class="message ${isSent ? 'sent' : 'received'}"><img src="/Image/${imageUrl}" alt="Image" /><div class="message-time">${message.sentTime}</div></div>`;
+                        } else if (message.type === 'Audio') {
+                            var audioUrl = message.value;
+                            messageHtml = `<div class="message ${isSent ? 'sent' : 'received'}"><audio controls><source src="/Audio/${audioUrl}" type="audio/mpeg">Your browser does not support the audio element.</audio><div class="message-time">${message.sentTime}</div></div>`;
+                        } else if (message.type === 'Video') {
+                            var videoUrl = message.value;
+                            messageHtml = `<div class="message ${isSent ? 'sent' : 'received'}"><video controls><source src="/Video/${videoUrl}" type="video/mp4">Your browser does not support the video element.</video><div class="message-time">${message.sentTime}</div></div>`;
+                        } else {
+                            messageHtml = `<div class="message ${isSent ? 'sent' : 'received'}">${message.value}<div class="message-time">${message.sentTime}</div></div>`;
                         }
+
+                        $('#messages-list').append(messageHtml);
                     });
                 }
+
+                function updateMessages() {
+                    if (currentChatUserId) {
+                        var chatContent = document.getElementById('chatContent');
+                        var scrollPosition = chatContent.scrollTop;
+
+                        $.ajax({
+                            url: `/Message/?sendId=${currentUserId}&receiveId=${currentChatUserId}`,
+                            method: 'GET',
+                            success: function (data) {
+                                $('#messages-list').empty();
+
+                                // Append messages
+                                appendMessages(data);
+
+                                // Restore scroll position
+                                chatContent.scrollTop = scrollPosition;
+                            }
+                        });
+                    }
+                }
+
+                $('.user-item').click(function () {
+                    var userId = $(this).data('id');
+                    $('.user-item').removeClass('active');
+                    $(this).addClass('active');
+                    $('#chatUser').text($(this).text());
+
+                    var inputElement = document.getElementById("ReceiveId");
+                    inputElement.value = userId;
+                    currentChatUserId = userId;
+
+                    updateMessages();
+                });
+
+                $('#send-message').click(function () {
+                    var messageValue = $('#Value').val();
+                    var receiveId = $('#ReceiveId').val();
+                    var type = $('#Type').val();
+
+                    if (messageValue && receiveId) {
+                        $.ajax({
+                            url: '/Message/SendMessage ',
+                            method: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                sendId: currentUserId,
+                                receiveId: receiveId,
+                                type: type,
+                                value: messageValue
+                            }),
+                            success: function () {
+                                $('#Value').val('');
+                                updateMessages();
+                            }
+                        });
+                    }
+                });
+
+                // Automatically update messages every 5 seconds
+                setInterval(updateMessages, 5000);
             });
-        });
-    </script>
-}
+        </script>
+    }
+</body>
+</html>

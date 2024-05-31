@@ -33,8 +33,9 @@ namespace MultimediaService.Controllers
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
+            var url = Url.Action("List", "User", new { }, Request.Scheme);
 
-            var response = await client.GetAsync("http://localhost:3000/User/List");
+            var response = await client.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {
                 var userListJson = await response.Content.ReadAsStringAsync();
