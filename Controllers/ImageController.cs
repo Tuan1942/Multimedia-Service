@@ -53,7 +53,7 @@ namespace MultimediaService.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadImage([FromForm] IFormFile image)
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile image, [FromForm] string sendId, [FromForm] string receiveId)
         {
             if (image == null || image.Length == 0)
             {
@@ -85,6 +85,8 @@ namespace MultimediaService.Controllers
 
             var message = new Message
             {
+                SendId = int.Parse(sendId),
+                ReceiveId = int.Parse(receiveId),
                 Type = Type,
                 Value = imageEntity.Id.ToString(),
                 SentTime = DateTime.Now
@@ -93,7 +95,7 @@ namespace MultimediaService.Controllers
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Id = imageEntity.Id, FileName = fileName, FilePath = filePath, CompressedFilePath = compressedFilePath });
+            return NoContent();
         }
     }
 }

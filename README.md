@@ -3,6 +3,13 @@ An api designed to manage, process, and serve multimedia content such as images,
   
 User Authentication:  
 User registration, login, and logout functionalities secured with JWT tokens.  
+Example User in MutimediaServiceDatabase:  
+	Account	Password
+	user1 	123456  
+	user2 	123456  
+	user3 	123456  
+	user4 	123456  
+	user5 	123456  
   
 Media Management:  
 Upload, compress, and retrieve images, audio, and video files.  
@@ -28,19 +35,19 @@ API Endpoints:
   
   Image Management:  
   /image/upload: Upload an image, compress it, and store both versions.  
-  /image/get/{id}: Retrieve an image by ID.  
+  /image/{id}: Retrieve an image by ID.  
     
   Video Management:  
   /video/upload: Upload a video, compress it, and store both versions.  
-  /video/get/{fileName}: Retrieve a video by filename.  
+  /video/{fileName}: Retrieve a video by filename.  
     
   Audio Management:  
   /audio/upload: Upload an audio file, compress it, and store both versions.  
-  /audio/get/{id}: Retrieve an audio file by ID.  
+  /audio/{id}: Retrieve an audio file by ID.  
     
   Message Management:  
-  /message/create: Create a message related to media uploads.  
-  /message/get/{id}: Retrieve a message by ID.  
+  /message/send: Create a message related to media uploads.  
+  /message/{id}: Retrieve a message by ID.  
   
 FFmpeg used: https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z  
 

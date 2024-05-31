@@ -53,7 +53,7 @@ namespace MultimediaService.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadAudio([FromForm] IFormFile audio)
+        public async Task<IActionResult> UploadAudio([FromForm] IFormFile audio, [FromForm] string sendId, [FromForm] string receiveId)
         {
             if (audio == null || audio.Length == 0)
             {
@@ -85,6 +85,8 @@ namespace MultimediaService.Controllers
 
             var message = new Message
             {
+                SendId = int.Parse(sendId),
+                ReceiveId = int.Parse(receiveId),
                 Type = Type,
                 Value = audioEntity.Id.ToString(),
                 SentTime = DateTime.Now
@@ -93,7 +95,7 @@ namespace MultimediaService.Controllers
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Id = audioEntity.Id, FileName = fileName, FilePath = filePath, CompressedFilePath = compressedFilePath });
+            return NoContent();
         }
     }
 }

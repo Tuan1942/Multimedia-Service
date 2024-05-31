@@ -53,7 +53,7 @@ namespace MultimediaService.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadVideo([FromForm] IFormFile video)
+        public async Task<IActionResult> UploadVideo([FromForm] IFormFile video, [FromForm] string sendId, [FromForm] string receiveId)
         {
             if (video == null || video.Length == 0)
             {
@@ -92,6 +92,8 @@ namespace MultimediaService.Controllers
 
             var message = new Message
             {
+                SendId = int.Parse(sendId),
+                ReceiveId = int.Parse(receiveId),
                 Type = Type,
                 Value = videoEntity.Id.ToString(),
                 SentTime = DateTime.Now
@@ -100,7 +102,7 @@ namespace MultimediaService.Controllers
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Id = videoEntity.Id, FileName = fileName, FilePath = filePath, CompressedFilePath = compressedFilePath });
+            return NoContent();
         }
     }
 }

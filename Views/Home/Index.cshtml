@@ -65,13 +65,24 @@
                             <div class="message-container" id="messages-list"></div>
                         </div>
                     </div>
-                    <div class="input-group mt-3" asp-controller="Message" asp-action="Send" method="post">
+                    <form class="input-group mt-3" asp-controller="Message" asp-action="Send" method="post">
                         <input type="hidden" id="SendId" name="SendId" value="@currentUserId">
                         <input type="hidden" id="ReceiveId" name="ReceiveId" value="">
                         <input type="hidden" id="Type" name="Type" value="Message">
                         <input type="text" id="Value" name="Value" class="form-control" placeholder="Type a message">
                         <button id="send-message" class="btn btn-primary" type="button">Send</button>
-                    </div>
+                    </form>
+                    <form id="uploadForm" action="" method="post" enctype="multipart/form-data">
+                        <input type="file" id="inputFile" name="file" accept="file_extension|audio/*|video/*|image/*|media_type">
+                        <input type="hidden" id="SendIdFile" name="sendId" value="@currentUserId">
+                        <input type="hidden" id="ReceiveIdFile" name="receiveId" value="">
+                        <input type="hidden" id="FileType" value="" />
+                        <button id="send-file" class="btn btn-outline-primary" type="submit">Send File</button>
+                    </form>
+                    <div id="preview"></div>
+
+                    <div id="preview"></div>
+                    <input type="hidden" id="FileType" value="" />
                 </div>
             </div>
             <div class="col-md-3">
@@ -151,6 +162,7 @@
                     }
                 }
 
+                // Open message
                 $('.user-item').click(function () {
                     var userId = $(this).data('id');
                     $('.user-item').removeClass('active');
@@ -159,6 +171,7 @@
 
                     var inputElement = document.getElementById("ReceiveId");
                     inputElement.value = userId;
+                    document.getElementById("ReceiveIdFile").value = userId;
                     currentChatUserId = userId;
 
                     updateMessages();
@@ -171,7 +184,7 @@
 
                     if (messageValue && receiveId) {
                         $.ajax({
-                            url: '/Message/SendMessage ',
+                            url: '/Message/SendMessage',
                             method: 'POST',
                             contentType: 'application/json',
                             data: JSON.stringify({
@@ -188,8 +201,122 @@
                     }
                 });
 
-                // Automatically update messages every 5 seconds
-                setInterval(updateMessages, 5000);
+                // Preview image, video, and audio
+                document.getElementById('inputFile').addEventListener('change', function () {
+                    var file = this.files[0];
+                    var fileType = file.type;
+
+                    // Cập nhật giá trị của ô input ẩn
+                    var fileTypeInput = document.getElementById('FileType');
+                    var inputFile = document.getElementById('inputFile');
+                    var sendFileButton = document.getElementById('send-file');
+                    if (fileType && fileType.split('/')[0] === 'audio') {
+                        fileTypeInput.value = 'Audio';
+                        inputFile.name = 'audio';
+                        sendFileButton.disabled = false;
+                    } else if (fileType && fileType.split('/')[0] === 'video') {
+                        fileTypeInput.value = 'Video';
+                        inputFile.name = 'video';
+                        sendFileButton.disabled = false;
+                    } else if (fileType && fileType.split('/')[0] === 'image') {
+                        fileTypeInput.value = 'Image';
+                        inputFile.name = 'image';
+                        sendFileButton.disabled = false;
+                    } else {
+                        fileTypeInput.value = 'Other';
+                        inputFile.name = 'file';
+                        sendFileButton.disabled = true;
+                    }
+
+                    // Kiểm tra và hiển thị xem trước
+                    if (fileType && (fileType.split('/')[0] === 'audio' || fileType.split('/')[0] === 'video')) {
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            var preview = document.getElementById('preview');
+                            preview.innerHTML = '';
+
+                            if (fileType.split('/')[0] === 'audio') {
+                                var audio = document.createElement('audio');
+                                audio.controls = true;
+                                audio.src = e.target.result;
+                                preview.appendChild(audio);
+                            } else {
+                                var video = document.createElement('video');
+                                video.controls = true;
+                                video.src = e.target.result;
+                                video.style.maxWidth = '100%';
+                                video.style.maxHeight = '200px';
+                                preview.appendChild(video);
+                            }
+                        };
+
+                        reader.readAsDataURL(file);
+                    } else if (fileType && fileType.split('/')[0] === 'image') {
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            var preview = document.getElementById('preview');
+                            preview.innerHTML = '';
+
+                            var img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.style.maxWidth = '100%';
+                            img.style.maxHeight = '200px';
+                            preview.appendChild(img);
+                        };
+
+                        reader.readAsDataURL(file);
+                    } else {
+                        var preview = document.getElementById('preview');
+                        preview.innerHTML = '<p>This file type is not supported for preview.</p>';
+                    }
+                });
+
+                // Send file
+                document.getElementById('send-file').addEventListener('click', function (event) {
+                    event.preventDefault();
+                    var fileType = document.getElementById('FileType').value;
+                    var form = document.getElementById('uploadForm');
+
+                    // Kiểm tra giá trị của ReceiveIdFile và SendIdFile
+                    var receiveIdFile = document.getElementById('ReceiveIdFile').value;
+                    var sendIdFile = document.getElementById('SendIdFile').value;
+
+                    if (!receiveIdFile || !sendIdFile) {
+                        // Nếu một trong các trường này là null, vô hiệu hóa nút "Send File" và không thực hiện gửi
+                        document.getElementById('send-file').disabled = true;
+                        return;
+                    }
+
+                    // Nếu cả hai trường đều có giá trị, tiếp tục xử lý gửi tệp
+                    document.getElementById('send-file').disabled = false;
+
+                    if (fileType === 'Image') {
+                        form.action = '/Image/Upload';
+                    } else if (fileType === 'Audio') {
+                        form.action = '/Audio/Upload';
+                    } else if (fileType === 'Video') {
+                        form.action = '/Video/Upload';
+                    } else {
+                        form.action = '/Other/Upload';
+                    }
+
+                    var formData = new FormData(form);
+                    $.ajax({
+                        url: form.action,
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function () {
+                            updateMessages();
+                            document.getElementById('preview').value = null;
+                            document.getElementById('send-file').disabled = true;
+                            document.getElementById('inputFile').value = null;
+                        }
+                    });
+                });
             });
         </script>
     }
