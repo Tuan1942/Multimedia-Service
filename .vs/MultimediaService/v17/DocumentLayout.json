@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "D:\\source\\Visual Studio 2022\\MultimediaService\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -27,6 +31,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AQIAADgAAAAAAAAAAAAuwEMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-31T04:59:40.121Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "HomeController.cs",
               "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
@@ -34,31 +51,30 @@
               "RelativeToolTip": "Controllers\\HomeController.cs",
               "ViewState": "AQIAAB8AAAAAAAAAAAAuwDIAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-30T15:11:07.156Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-30T15:11:07.156Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "MessageController.cs",
               "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\MessageController.cs",
               "RelativeDocumentMoniker": "Controllers\\MessageController.cs",
               "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\MessageController.cs",
               "RelativeToolTip": "Controllers\\MessageController.cs",
-              "ViewState": "AQIAACoAAAAAAAAAAAA8wDcAAAAkAAAA",
+              "ViewState": "AQIAADwAAAAAAAAAAAAqwEYAAAAhAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-30T08:30:23.932Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Index.cshtml",
               "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Views\\Home\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
               "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\Views\\Home\\Index.cshtml",
               "RelativeToolTip": "Views\\Home\\Index.cshtml",
-              "ViewState": "AQIAAIkAAAAAAAAAAAAAwJIAAAAAAAAA",
+              "ViewState": "AQIAAIQAAAAAAAAAAAAuwH0AAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-05-30T07:05:32.019Z",
               "EditorCaption": ""

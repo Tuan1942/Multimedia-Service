@@ -68,6 +68,22 @@ namespace MultimediaService.Controllers
             return NoContent();
         }
 
+        [HttpPost("SendMessage")]
+        public async Task<IActionResult> SendMessage([FromBody] Message message)
+        {
+            if (message == null)
+            {
+                return BadRequest();
+            }
+
+            message.SentTime = DateTime.Now;
+
+            _context.Messages.Add(message);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMessage(int id)
         {
