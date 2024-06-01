@@ -45,7 +45,10 @@ namespace MultimediaService.Controllers
                 var currentUser = _httpContextAccessor.HttpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
                 var filteredUserList = userList.Where(u => u.Id.ToString() != currentUser).ToList();
                 ViewBag.UserID = currentUser;
-                return View(new Home { Users = filteredUserList, HttpContextAccessor = _httpContextAccessor });
+                return View(new Home { 
+                    Users = filteredUserList, 
+                    HttpContextAccessor = _httpContextAccessor 
+                });
             }
 
             return View(new Home());

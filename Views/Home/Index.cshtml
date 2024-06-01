@@ -51,11 +51,11 @@
     </style>
 </head>
 <body>
-    <div class="container-fluid position-relative">
+    <div class="container ">
         <div class="row">
             <div class="col-md-9">
                 <div class="">
-                    <h5 class="modal-title" id="chatModalLabel">Chat with <span id="chatUser"></span></h5>
+                    <h5 class="modal-title" id="chatModalLabel"> <span id="chatUser"></span></h5>
                 </div>
                 <div class="modal-body">
                     <!-- Chat content goes here -->
@@ -98,7 +98,7 @@
                                         <div class="d-flex w-100 justify-content-between">
                                             <h5 class="mb-1">@user.Username</h5>
                                         </div>
-                                        <small class="text-muted">Joined on: @user.CreatedAt.ToString("MMMM dd, yyyy")</small>
+                                        <small class="text-muted">Tham gia vào: @user.CreatedAt.ToString("dd MMMM, yyyy")</small>
                                     </a>
                                 }
                             </div>
@@ -106,7 +106,6 @@
                     }
                     else
                     {
-                        <p>No users found.</p>
                     }
                 </div>
             </div>
@@ -118,6 +117,7 @@
             $(document).ready(function () {
                 var currentUserId = '@currentUserId';
                 var currentChatUserId = null;
+                var currentMessageCount = 0;
 
                 function appendMessages(messages) {
                     messages.forEach(function (message) {
@@ -150,13 +150,12 @@
                             url: `/Message/?sendId=${currentUserId}&receiveId=${currentChatUserId}`,
                             method: 'GET',
                             success: function (data) {
-                                $('#messages-list').empty();
-
-                                // Append messages
-                                appendMessages(data);
-
-                                // Restore scroll position
-                                chatContent.scrollTop = scrollPosition;
+                                if (data.length > currentMessageCount) {
+                                    $('#messages-list').empty();
+                                    appendMessages(data);
+                                    chatContent.scrollTop = chatContent.scrollHeight; // Auto scroll to bottom if new messages
+                                }
+                                currentMessageCount = data.length; // Update the current message count
                             }
                         });
                     }
@@ -206,7 +205,6 @@
                     var file = this.files[0];
                     var fileType = file.type;
 
-                    // Cập nhật giá trị của ô input ẩn
                     var fileTypeInput = document.getElementById('FileType');
                     var inputFile = document.getElementById('inputFile');
                     var sendFileButton = document.getElementById('send-file');
@@ -228,7 +226,6 @@
                         sendFileButton.disabled = true;
                     }
 
-                    // Kiểm tra và hiển thị xem trước
                     if (fileType && (fileType.split('/')[0] === 'audio' || fileType.split('/')[0] === 'video')) {
                         var reader = new FileReader();
 
@@ -279,17 +276,14 @@
                     var fileType = document.getElementById('FileType').value;
                     var form = document.getElementById('uploadForm');
 
-                    // Kiểm tra giá trị của ReceiveIdFile và SendIdFile
                     var receiveIdFile = document.getElementById('ReceiveIdFile').value;
                     var sendIdFile = document.getElementById('SendIdFile').value;
 
                     if (!receiveIdFile || !sendIdFile) {
-                        // Nếu một trong các trường này là null, vô hiệu hóa nút "Send File" và không thực hiện gửi
                         document.getElementById('send-file').disabled = true;
                         return;
                     }
 
-                    // Nếu cả hai trường đều có giá trị, tiếp tục xử lý gửi tệp
                     document.getElementById('send-file').disabled = false;
 
                     if (fileType === 'Image') {
@@ -311,12 +305,15 @@
                         processData: false,
                         success: function () {
                             updateMessages();
-                            document.getElementById('preview').value = null;
+                            document.getElementById('preview').innerHTML = '';
                             document.getElementById('send-file').disabled = true;
-                            document.getElementById('inputFile').value = null;
+                            document.getElementById('inputFile').value = '';
                         }
                     });
                 });
+
+                // Automatically update messages every 5 seconds
+                setInterval(updateMessages, 5000);
             });
         </script>
     }

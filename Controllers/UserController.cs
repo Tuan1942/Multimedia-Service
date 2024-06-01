@@ -71,7 +71,7 @@ namespace MultimediaService.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict
+                SameSite = SameSiteMode.None
             });
             return RedirectToAction("Index", "Home");
         }
