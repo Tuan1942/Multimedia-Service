@@ -12,8 +12,9 @@ namespace MultimediaService.Controllers
     [ApiController]
     public class AudioController : ControllerBase
     {
-        private readonly string _targetFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Multimedia\\Audios");
-        private readonly string _compressedFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Compressed\\Audios");
+        //private readonly string _targetFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Multimedia\\Audios");
+        private readonly string _targetFilePath = "Multimedia\\Audios";
+        private readonly string _compressedFilePath = "Compressed\\Audios";
         private readonly MultimediaContext _context;
         private string Type;
 

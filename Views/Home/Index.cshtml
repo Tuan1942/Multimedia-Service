@@ -69,15 +69,15 @@
                         <input type="hidden" id="SendId" name="SendId" value="@currentUserId">
                         <input type="hidden" id="ReceiveId" name="ReceiveId" value="">
                         <input type="hidden" id="Type" name="Type" value="Message">
-                        <input type="text" id="Value" name="Value" class="form-control" placeholder="Type a message">
-                        <button id="send-message" class="btn btn-primary" type="button">Send</button>
+                        <input type="text" id="Value" name="Value" class="form-control" placeholder="Nhập tin nhắn">
+                        <button id="send-message" class="btn btn-primary" type="button">Gửi</button>
                     </form>
                     <form id="uploadForm" action="" method="post" enctype="multipart/form-data">
                         <input type="file" id="inputFile" name="file" accept="file_extension|audio/*|video/*|image/*|media_type">
                         <input type="hidden" id="SendIdFile" name="sendId" value="@currentUserId">
                         <input type="hidden" id="ReceiveIdFile" name="receiveId" value="">
                         <input type="hidden" id="FileType" value="" />
-                        <button id="send-file" class="btn btn-outline-primary" type="submit">Send File</button>
+                        <button id="send-file" class="btn btn-danger" type="submit">Gửi tệp</button>
                     </form>
                     <div id="preview"></div>
 
@@ -94,7 +94,7 @@
                             <div class="list-group">
                                 @foreach (var user in Model.Users)
                                 {
-                                    <a href="#" data-id="@user.Id" class="list-group-item list-group-item-action user-item" onclick="openChat('@user.Username')">
+                                    <a href="#" data-id="@user.Id" class="list-group-item list-group-item-action user-item" >
                                         <div class="d-flex w-100 justify-content-between">
                                             <h5 class="mb-1">@user.Username</h5>
                                         </div>

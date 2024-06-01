@@ -38,6 +38,15 @@ namespace MultimediaService.Controllers
             }
             return Ok(message);
         }
+        public class MessageDTO
+        {
+            public int Id { get; set; }
+            public int SendId { get; set; }
+            public int ReceiveId { get; set; }
+            public string Type { get; set; }
+            public string Value { get; set; }
+            public string SentTime { get; set; } // Change the type to string for formatted date
+        }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessagesBySenderReceiver(int sendId, int receiveId)
@@ -45,7 +54,18 @@ namespace MultimediaService.Controllers
             var messages = await _context.Messages
                 .Where(m => (m.SendId == sendId && m.ReceiveId == receiveId) || (m.SendId == receiveId && m.ReceiveId == sendId))
                 .ToListAsync();
-            return Ok(messages);
+
+            var messageDTOs = messages.Select(m => new MessageDTO
+            {
+                Id = m.Id,
+                SendId = m.SendId,
+                ReceiveId = m.ReceiveId,
+                Type = m.Type,
+                Value = m.Value,
+                SentTime = m.SentTime.ToString("HH:mm dd-MM-yyyy") // Format the date
+            }).ToList();
+
+            return Ok(messageDTOs);
         }
 
         [HttpPost]

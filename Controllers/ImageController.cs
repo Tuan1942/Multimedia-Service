@@ -12,8 +12,10 @@ namespace MultimediaService.Controllers
     [ApiController]
     public class ImageController : ControllerBase
     {
-        private readonly string _targetFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Multimedia\\Images");
-        private readonly string _compressedFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Compressed\\Images");
+        //private readonly string _targetFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Multimedia\\Images");
+        //private readonly string _compressedFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Compressed\\Images");
+        private readonly string _targetFilePath = "Multimedia\\Images";
+        private readonly string _compressedFilePath = "Compressed\\Images";
         private readonly MultimediaContext _context;
         private string Type;
 
