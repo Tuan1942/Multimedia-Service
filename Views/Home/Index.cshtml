@@ -120,6 +120,7 @@
                 var currentMessageCount = 0;
 
                 function appendMessages(messages) {
+                    messages.reverse(); 
                     messages.forEach(function (message) {
                         var messageHtml = '';
                         var isSent = message.sendId == currentUserId;
@@ -137,12 +138,13 @@
                             messageHtml = `<div class="message ${isSent ? 'sent' : 'received'}">${message.value}<div class="message-time">${message.sentTime}</div></div>`;
                         }
 
-                        $('#messages-list').append(messageHtml);
+                        $('#messages-list').prepend(messageHtml); // Prepend each message
                     });
                 }
 
                 function updateMessages() {
                     if (currentChatUserId) {
+                        console.log("Updating messages for chat user ID:", currentChatUserId); // Add this line
                         var chatContent = document.getElementById('chatContent');
                         var scrollPosition = chatContent.scrollTop;
 
@@ -172,6 +174,7 @@
                     inputElement.value = userId;
                     document.getElementById("ReceiveIdFile").value = userId;
                     currentChatUserId = userId;
+                    currentMessageCount = 0; // Reset message count when switching users
 
                     updateMessages();
                 });
