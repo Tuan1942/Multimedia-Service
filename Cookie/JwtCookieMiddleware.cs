@@ -12,7 +12,7 @@
         public async Task Invoke(HttpContext context)
         {
             var token = context.Request.Cookies["jwtToken"];
-            if (!string.IsNullOrEmpty(token))
+            if (!string.IsNullOrEmpty(token) && !context.Request.Headers.ContainsKey("Authorization"))
             {
                 context.Request.Headers.Add("Authorization", $"Bearer {token}");
             }

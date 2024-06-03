@@ -76,6 +76,24 @@ namespace MultimediaService.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpPost("loginAsync")]
+        public async Task<IActionResult> LoginAsync(string userName, string password)
+        {
+            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == userName);
+            if (dbUser == null || !VerifyPassword(password, dbUser.PasswordHash))
+            {
+                return Unauthorized("Invalid username or password.");
+            }
+
+            var token = GenerateJwtToken(dbUser, _configuration);
+            HttpContext.Response.Cookies.Append("jwtToken", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = false,
+                SameSite = SameSiteMode.Lax
+            });
+            return RedirectToAction("Index", "Home");
+        }
         [HttpPost("logout")]
         [Authorize]
         public IActionResult Logout()
