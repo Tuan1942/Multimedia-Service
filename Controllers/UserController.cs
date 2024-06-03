@@ -70,8 +70,8 @@ namespace MultimediaService.Controllers
             HttpContext.Response.Cookies.Append("jwtToken", token, new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.None
+                Secure = false,
+                SameSite = SameSiteMode.Lax
             });
             return RedirectToAction("Index", "Home");
         }

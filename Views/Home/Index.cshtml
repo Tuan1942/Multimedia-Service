@@ -86,10 +86,11 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="position-fixed" style="top: 70px; bottom: 0; width: 25%;">
+                <div class="position-fixed" style="top: 70px; width: 25%;">
                     @if (Model != null && Model.Users != null)
                     {
-                        <h2>Danh sách liên hệ:</h2>
+                        <details>
+                        <summary>Danh sách liên hệ:</summary>
                         <div class="overflow-auto" style="height: 80vh;">
                             <div class="list-group">
                                 @foreach (var user in Model.Users)
@@ -102,7 +103,8 @@
                                     </a>
                                 }
                             </div>
-                        </div>
+                            </div>
+                        </details>
                     }
                     else
                     {
