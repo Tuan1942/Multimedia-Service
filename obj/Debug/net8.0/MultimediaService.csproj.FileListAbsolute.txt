@@ -271,3 +271,5 @@ D:\source\Visual Studio 2022\MultimediaService\obj\Debug\net8.0\MultimediaServic
 D:\source\Visual Studio 2022\MultimediaService\obj\Debug\net8.0\MultimediaService.genruntimeconfig.cache
 D:\source\Visual Studio 2022\MultimediaService\obj\Debug\net8.0\ref\MultimediaService.dll
 D:\source\Visual Studio 2022\MultimediaService\obj\Debug\net8.0\MultimediaService.sourcelink.json
+D:\source\Visual Studio 2022\MultimediaService\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\source\Visual Studio 2022\MultimediaService\bin\Debug\net8.0\Newtonsoft.Json.dll

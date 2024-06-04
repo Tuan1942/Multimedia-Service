@@ -78,6 +78,36 @@ namespace MultimediaService.Migrations
                     b.ToTable("Images");
                 });
 
+            modelBuilder.Entity("MultimediaService.Context.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ReceiveId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SendId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SentTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("MultimediaService.Context.Video", b =>
                 {
                     b.Property<int>("Id")

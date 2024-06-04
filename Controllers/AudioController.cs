@@ -4,20 +4,24 @@ using MultimediaService.Services;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using static MultimediaService.Context.MultimediaContext;
 
 namespace MultimediaService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AudioController : ControllerBase
     {
-        private readonly string _targetFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Multimedia\\Audios");
-        private readonly string _compressedFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Compressed\\Audios");
+        //private readonly string _targetFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Multimedia\\Audios");
+        private readonly string _targetFilePath = "Multimedia\\Audios";
+        private readonly string _compressedFilePath = "Compressed\\Audios";
         private readonly MultimediaContext _context;
+        private string Type;
 
         public AudioController(MultimediaContext context)
         {
             _context = context;
+            Type = this.GetType().Name.Replace("Controller", "");
 
             if (!Directory.Exists(_targetFilePath))
             {
@@ -50,7 +54,7 @@ namespace MultimediaService.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadAudio([FromForm] IFormFile audio)
+        public async Task<IActionResult> UploadAudio([FromForm] IFormFile audio, [FromForm] string sendId, [FromForm] string receiveId)
         {
             if (audio == null || audio.Length == 0)
             {
@@ -80,7 +84,19 @@ namespace MultimediaService.Controllers
             _context.Audios.Add(audioEntity);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Id = audioEntity.Id, FileName = fileName, FilePath = filePath, CompressedFilePath = compressedFilePath });
+            var message = new Message
+            {
+                SendId = int.Parse(sendId),
+                ReceiveId = int.Parse(receiveId),
+                Type = Type,
+                Value = audioEntity.Id.ToString(),
+                SentTime = DateTime.Now
+            };
+
+            _context.Messages.Add(message);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

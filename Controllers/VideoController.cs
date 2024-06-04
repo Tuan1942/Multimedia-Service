@@ -4,20 +4,25 @@ using MultimediaService.Services;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using static MultimediaService.Context.MultimediaContext;
 
 namespace MultimediaService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class VideoController : ControllerBase
     {
-        private readonly string _targetFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Multimedia\\Videos");
-        private readonly string _compressedFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Compressed\\Videos");
+        //private readonly string _targetFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Multimedia\\Videos");
+        //private readonly string _compressedFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Compressed\\Videos");
+        private readonly string _targetFilePath = "Multimedia\\Videos";
+        private readonly string _compressedFilePath = "Compressed\\Videos";
         private readonly MultimediaContext _context;
+        private string Type;
 
         public VideoController(MultimediaContext context)
         {
             _context = context;
+            Type = GetType().Name.Replace("Controller", "");
 
             if (!Directory.Exists(_targetFilePath))
             {
@@ -50,7 +55,7 @@ namespace MultimediaService.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadVideo([FromForm] IFormFile video)
+        public async Task<IActionResult> UploadVideo([FromForm] IFormFile video, [FromForm] string sendId, [FromForm] string receiveId)
         {
             if (video == null || video.Length == 0)
             {
@@ -87,7 +92,19 @@ namespace MultimediaService.Controllers
             _context.Videos.Add(videoEntity);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Id = videoEntity.Id, FileName = fileName, FilePath = filePath, CompressedFilePath = compressedFilePath });
+            var message = new Message
+            {
+                SendId = int.Parse(sendId),
+                ReceiveId = int.Parse(receiveId),
+                Type = Type,
+                Value = videoEntity.Id.ToString(),
+                SentTime = DateTime.Now
+            };
+
+            _context.Messages.Add(message);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
