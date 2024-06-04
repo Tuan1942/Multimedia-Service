@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\source\\Visual Studio 2022\\MultimediaService\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\cookie\\jwtcookiemiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:cookie\\jwtcookiemiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -13,10 +17,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A4F7996E-5A20-421A-849C-08BE76DAE899}|MultimediaService.csproj|d:\\source\\visual studio 2022\\multimediaservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -30,17 +30,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "JwtCookieMiddleware.cs",
               "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Cookie\\JwtCookieMiddleware.cs",
               "RelativeDocumentMoniker": "Cookie\\JwtCookieMiddleware.cs",
               "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\Cookie\\JwtCookieMiddleware.cs",
               "RelativeToolTip": "Cookie\\JwtCookieMiddleware.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB8AAAAAAAAA",
+              "ViewState": "AQIAAAIAAAAAAAAAAAAxwA4AAAA2AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-03T10:05:08.228Z",
               "EditorCaption": ""
@@ -59,19 +59,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Index.cshtml",
               "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Views\\Home\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
               "ToolTip": "D:\\source\\Visual Studio 2022\\MultimediaService\\Views\\Home\\Index.cshtml",
               "RelativeToolTip": "Views\\Home\\Index.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADMAAAAHAAAA",
+              "ViewState": "AQIAAJUAAAAAAAAAAAAAAJQAAABfAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-01T11:53:40.401Z"
+              "WhenOpened": "2024-06-01T11:53:40.401Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "UserController.cs",
               "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "Controllers\\UserController.cs",
@@ -79,12 +80,11 @@
               "RelativeToolTip": "Controllers\\UserController.cs",
               "ViewState": "AQIAAFcAAAAAAAAAAAAhwGMAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-01T03:26:36.761Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-01T03:26:36.761Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "HomeController.cs",
               "DocumentMoniker": "D:\\source\\Visual Studio 2022\\MultimediaService\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
