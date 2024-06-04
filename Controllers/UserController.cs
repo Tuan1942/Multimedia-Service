@@ -38,6 +38,7 @@ namespace MultimediaService.Controllers
             var user = new User
             {
                 Username = registerModel.Username,
+                FullName = registerModel.FullName,
                 PasswordHash = HashPassword(registerModel.Password),
                 CreatedAt = DateTime.Now
             };
@@ -141,7 +142,7 @@ namespace MultimediaService.Controllers
                 return NotFound("User not found!");
             }
 
-            return Ok(new { user.Id, user.Username });
+            return Ok(new { user.Id, user.FullName });
         }
 
         private string HashPassword(string password)
@@ -166,7 +167,7 @@ namespace MultimediaService.Controllers
 
             var claims = new[]
             {
-        new Claim(ClaimTypes.Name, user.Username), // Add user's name as a claim
+        new Claim(ClaimTypes.Name, user.FullName), // Add user's name as a claim
         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Use UserID as NameIdentifier
     };
 
@@ -185,12 +186,12 @@ namespace MultimediaService.Controllers
         [Authorize]
         public async Task<IActionResult> GetListUser()
         {
-            var currentUsername = User.Identity.Name;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var userList = await _context.Users
-                .Where(u => u.Username != currentUsername)
+                .Where(u => u.Id != int.Parse(userIdClaim))
                 .Select(u => new {
                     u.Id,
-                    u.Username,
+                    u.FullName,
                     u.CreatedAt
                 })
                 .ToListAsync();

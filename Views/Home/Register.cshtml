@@ -23,6 +23,16 @@
             </div>
             <div class="form-group mt-2">
                 <div class="d-flex flex-row align-items-center">
+                    <i class="fas fa-user fa-lg me-3 fa-fw mt-4"></i>
+                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                        <label asp-for="FullName">Họ và tên:</label>
+                        <input asp-for="FullName" class="form-control w-75" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <div class="d-flex flex-row align-items-center">
                     <i class="fas fa-lock fa-lg me-3 fa-fw mt-4"></i>
                     <div data-mdb-input-init class="form-outline flex-fill mb-0">
                         <label asp-for="Password">Mật khẩu</label>
