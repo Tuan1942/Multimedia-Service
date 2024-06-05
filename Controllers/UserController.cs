@@ -93,7 +93,7 @@ namespace MultimediaService.Controllers
                 Secure = false,
                 SameSite = SameSiteMode.Lax
             });
-            return RedirectToAction("Index", "Home");
+            return Ok(token);
         }
         [HttpPost("logout")]
         [Authorize]

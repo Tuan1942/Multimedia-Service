@@ -2,7 +2,7 @@
     @if (User.Identity.IsAuthenticated)
     {
         <li class="nav-item">
-            <span class="nav-link text-dark">Người dùng đăng nhập: @User.Identity.Name</span>
+            <span class="nav-link text-dark">@User.Identity.Name</span>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-controller="User" asp-action="Logout" method="post" class="form-inline">
