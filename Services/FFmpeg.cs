@@ -111,7 +111,7 @@ namespace MultimediaService.Services
         }
         public static void CompressImage(string inputPath, string outputPath)
         {
-            var arguments = $"-i \"{inputPath}\" -qscale:v 2 \"{outputPath}\"";
+            var arguments = $"-i \"{inputPath}\" -qscale:v 20 \"{outputPath}\"";
 
             var processStartInfo = new ProcessStartInfo
             {

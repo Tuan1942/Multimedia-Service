@@ -32,8 +32,11 @@ namespace MultimediaService.Controllers
         {
             if (await _context.Users.AnyAsync(u => u.Username == registerModel.Username))
             {
-                return BadRequest("Username already exists.");
+                return BadRequest("Tên người dùng đã tồn tại.");
             }
+
+            if (registerModel.Password != registerModel.ConfirmPassword)
+            { return BadRequest("Mật khẩu xác nhận không đúng!"); }
 
             var user = new User
             {
@@ -47,13 +50,7 @@ namespace MultimediaService.Controllers
             await _context.SaveChangesAsync();
 
             //Login after Register
-            var token = GenerateJwtToken(user, _configuration);
-            HttpContext.Response.Cookies.Append("jwtToken", token, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict
-            });
+            AddCookie(user, _configuration);
 
             return RedirectToAction("Index", "Home");
         }
@@ -64,16 +61,10 @@ namespace MultimediaService.Controllers
             var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == loginModel.Username);
             if (dbUser == null || !VerifyPassword(loginModel.Password, dbUser.PasswordHash))
             {
-                return Unauthorized("Invalid username or password.");
+                return Unauthorized("Thông tin không hợp lệ.");
             }
 
-            var token = GenerateJwtToken(dbUser, _configuration);
-            HttpContext.Response.Cookies.Append("jwtToken", token, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = false,
-                SameSite = SameSiteMode.Lax
-            });
+            AddCookie(dbUser, _configuration);
             return RedirectToAction("Index", "Home");
         }
 
@@ -83,18 +74,25 @@ namespace MultimediaService.Controllers
             var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == userName);
             if (dbUser == null || !VerifyPassword(password, dbUser.PasswordHash))
             {
-                return Unauthorized("Invalid username or password.");
+                return Unauthorized("Thông tin không hợp lệ.");
             }
 
-            var token = GenerateJwtToken(dbUser, _configuration);
+            string token = AddCookie(dbUser, _configuration);
+            return Ok(token);
+        }
+
+        public string AddCookie(User user, IConfiguration configuration)
+        {
+            var token = GenerateJwtToken(user, configuration);
             HttpContext.Response.Cookies.Append("jwtToken", token, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = false,
                 SameSite = SameSiteMode.Lax
             });
-            return Ok(token);
+            return token;
         }
+
         [HttpPost("logout")]
         [Authorize]
         public IActionResult Logout()
@@ -103,7 +101,7 @@ namespace MultimediaService.Controllers
             var jwtToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
             if (jwtToken == null)
             {
-                return BadRequest("Invalid token.");
+                return BadRequest("Token không hợp lệ.");
             }
             /*
             var blacklistToken = new TokenBlacklist
@@ -127,22 +125,57 @@ namespace MultimediaService.Controllers
 
             if (string.IsNullOrEmpty(userIdClaim))
             {
-                return NotFound("User not found!");
+                return NotFound("Không tìm thấy tài khoản!");
             }
 
             if (!int.TryParse(userIdClaim, out var userId))
             {
-                return BadRequest("Invalid user ID format.");
+                return BadRequest("Người dùng không hợp lệ.");
             }
 
             var user = await _context.Users.FindAsync(userId);
 
             if (user == null)
             {
-                return NotFound("User not found!");
+                return NotFound("Không tìm thấy tài khoản!");
             }
 
-            return Ok(new { user.Id, user.FullName });
+            return Ok(new { user.Id, user.Username, user.FullName });
+        }
+
+        [HttpPut]
+        [Authorize("Update")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateUser([FromForm] RegisterModel registerModel)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == registerModel.Username);
+            if (user == null)
+            {
+                return NotFound("Không tìm thấy tài khoản.");
+            }
+
+            if (registerModel.Password != registerModel.ConfirmPassword)
+            { return BadRequest("Mật khẩu xác nhận không đúng!"); }
+
+            user.FullName = registerModel.FullName;
+            var newUser = new User
+            {
+                FullName = registerModel.FullName,
+                PasswordHash = HashPassword(registerModel.Password)
+            };
+            if (!string.IsNullOrEmpty(registerModel.Password))
+            {
+                user.PasswordHash = HashPassword(registerModel.Password);
+            }
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            // Đăng nhập lại
+            HttpContext.Response.Cookies.Delete("jwtToken");
+            AddCookie(user, _configuration);
+
+            return Ok("Cập nhật thông tin người dùng thành công.");
         }
 
         private string HashPassword(string password)
@@ -165,11 +198,10 @@ namespace MultimediaService.Controllers
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
-            {
-        new Claim(ClaimTypes.Name, user.FullName), // Add user's name as a claim
-        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Use UserID as NameIdentifier
-    };
+            var claims = new[]{
+                new Claim(ClaimTypes.Name, user.FullName), // Add user's name as a claim
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Use UserID as NameIdentifier
+            };
 
             var token = new JwtSecurityToken(
                 issuer: configuration["Jwt:Issuer"],
