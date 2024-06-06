@@ -1,5 +1,5 @@
 Project Overview:  
-An api designed to manage, process, and serve multimedia content such as images, audio, and video files. It leverages ASP.NET Core for the backend, Entity Framework Core for data access, and FFmpeg for media processing tasks including compression and metadata management.  
+A chat website, allowing the sending of multimedia files. It leverages ASP.NET Core for the backend, Entity Framework Core for data access, and FFmpeg for media processing tasks including compression and metadata management.  
   
 User Authentication:  
 User registration, login, and logout functionalities secured with JWT tokens.  
