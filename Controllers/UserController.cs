@@ -209,7 +209,8 @@ namespace MultimediaService.Controllers
                 claims: claims,
                 notBefore: DateTime.UtcNow,
                 expires: DateTime.UtcNow.AddHours(1),
-                signingCredentials: credentials);
+                signingCredentials: credentials
+                );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
