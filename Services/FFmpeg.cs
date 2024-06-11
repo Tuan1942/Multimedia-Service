@@ -43,7 +43,6 @@ namespace MultimediaService.Services
             }
             catch (Exception ex)
             {
-                // Log exception
                 Debug.WriteLine("Exception: " + ex.Message);
                 return false;
             }
@@ -91,13 +90,11 @@ namespace MultimediaService.Services
 
                         if (process.ExitCode != 0)
                         {
-                            // Log error
                             Debug.WriteLine("FFmpeg Error: " + stdError.ToString());
                             return;
                         }
                     }
 
-                    // Replace the original file with the new file containing metadata
                     System.IO.File.Delete(filePath);
                     System.IO.File.Move(tempFilePath, filePath);
                 }
