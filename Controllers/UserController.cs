@@ -143,9 +143,8 @@ namespace MultimediaService.Controllers
             return Ok(new { user.Id, user.Username, user.FullName });
         }
 
-        [HttpPut]
-        [Authorize("Update")]
-        [HttpPost]
+        [HttpPut("Update")]
+        [Authorize]
         public async Task<IActionResult> UpdateUser([FromForm] RegisterModel registerModel)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == registerModel.Username);
@@ -155,14 +154,12 @@ namespace MultimediaService.Controllers
             }
 
             if (registerModel.Password != registerModel.ConfirmPassword)
-            { return BadRequest("Mật khẩu xác nhận không đúng!"); }
+            {
+                return BadRequest("Mật khẩu xác nhận không đúng!");
+            }
 
             user.FullName = registerModel.FullName;
-            var newUser = new User
-            {
-                FullName = registerModel.FullName,
-                PasswordHash = HashPassword(registerModel.Password)
-            };
+
             if (!string.IsNullOrEmpty(registerModel.Password))
             {
                 user.PasswordHash = HashPassword(registerModel.Password);
