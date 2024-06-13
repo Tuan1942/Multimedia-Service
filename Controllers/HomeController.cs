@@ -42,7 +42,7 @@ namespace MultimediaService.Controllers
                 var userList = JsonConvert.DeserializeObject<List<User>>(userListJson);
 
                 // Remove the current logged-in user from the list
-                var currentUser = _httpContextAccessor.HttpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                var currentUser = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var filteredUserList = userList.Where(u => u.Id.ToString() != currentUser).ToList();
                 ViewBag.UserID = currentUser;
                 return View(new Home { 
@@ -74,6 +74,26 @@ namespace MultimediaService.Controllers
 
         public IActionResult Audio()
         {
+            return View();
+        }
+        public async Task<IActionResult> AccountAsync()
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var token = _httpContextAccessor.HttpContext.Request.Cookies["jwtToken"];
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+            var url = Url.Action("Current", "User", new { }, Request.Scheme);
+
+            var response = await client.GetAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                var userJson = await response.Content.ReadAsStringAsync();
+                var user = JsonConvert.DeserializeObject<User>(userJson);
+                return View(new AccountModel(user));
+            }
             return View();
         }
 

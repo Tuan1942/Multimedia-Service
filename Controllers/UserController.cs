@@ -143,9 +143,46 @@ namespace MultimediaService.Controllers
             return Ok(new { user.Id, user.Username, user.FullName });
         }
 
-        [HttpPut("Update")]
+        [HttpPut("update")]
         [Authorize]
-        public async Task<IActionResult> UpdateUser([FromForm] RegisterModel registerModel)
+        public async Task<IActionResult> UpdateUser([FromForm] AccountModel registerModel)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == registerModel.Username);
+            if (user == null)
+            {
+                return NotFound("Không tìm thấy tài khoản.");
+            }
+
+            if (registerModel.Password != null && registerModel.ConfirmPassword != null)
+            {
+                if (registerModel.Password != registerModel.ConfirmPassword)
+                {
+                    return BadRequest("Mật khẩu xác nhận không đúng!");
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(registerModel.Password))
+                    {
+                        user.PasswordHash = HashPassword(registerModel.Password);
+                    }
+                }
+            }
+
+            user.FullName = registerModel.FullName;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            // Đăng nhập lại
+            HttpContext.Response.Cookies.Delete("jwtToken");
+            AddCookie(user, _configuration);
+
+            return Ok("Cập nhật thông tin người dùng thành công.");
+        }
+
+        [HttpPost("update")]
+        [Authorize]
+        public async Task<IActionResult> UpdateForm([FromForm] AccountModel registerModel)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == registerModel.Username);
             if (user == null)
