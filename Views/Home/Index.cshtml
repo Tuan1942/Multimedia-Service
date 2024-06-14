@@ -70,7 +70,7 @@
                     <h5 class="modal-title" id="chatModalLabel"> <span id="chatUser"></span></h5>
                     <h2>Messages</h2>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="display:none;" id="messageBox">
                     <!-- Chat content goes here -->
                     <div id="chatContent" style="height: 70vh; overflow-y: auto;">
                         <div id="message-container">
@@ -187,6 +187,8 @@
 
                     var inputElement = document.getElementById("ReceiveId");
                     inputElement.value = userId;
+                    var messageBox = document.getElementById("messageBox");
+                    messageBox.style.display = "block";
                     document.getElementById("ReceiveIdFile").value = userId;
                     currentChatUserId = userId;
                     currentMessageCount = 0; // Reset message count when switching users
