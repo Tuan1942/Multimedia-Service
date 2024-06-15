@@ -233,8 +233,8 @@ namespace MultimediaService.Controllers
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]{
-                new Claim(ClaimTypes.Name, user.FullName), // Add user's name as a claim
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Use UserID as NameIdentifier
+                new Claim(ClaimTypes.Name, user.FullName), // Thêm tên người dùng
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Định danh thông qua UserID
             };
 
             var token = new JwtSecurityToken(
