@@ -23,6 +23,16 @@
             </div>
             <div class="form-group mt-2">
                 <div class="d-flex flex-row align-items-center">
+                    <i class="fas fa-user fa-lg me-3 fa-fw mt-4"></i>
+                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                        <label asp-for="FullName">Họ và tên:</label>
+                        <input asp-for="FullName" class="form-control w-75" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <div class="d-flex flex-row align-items-center">
                     <i class="fas fa-lock fa-lg me-3 fa-fw mt-4"></i>
                     <div data-mdb-input-init class="form-outline flex-fill mb-0">
                         <label asp-for="Password">Mật khẩu</label>
@@ -41,13 +51,13 @@
                     </div>
                 </div>
             </div>
-            <div class="form-check d-flex justify-content-start mt-2">
+@*             <div class="form-check d-flex justify-content-start mt-2">
                 <input class="form-check-input me-2" type="checkbox" value="" id="service" />
                 <label class="form-check-label" for="service">
                     Đồng ý về <a href="#!">Điều khoản và dịch vụ</a>
                 </label>
             </div>
-            <button type="submit" class="btn btn-primary mt-4">Đăng ký</button>
+ *@            <button type="submit" class="btn btn-primary mt-4">Đăng ký</button>
             <div class="text-center text-lg-start">
                 <p class="fw-bold mt-2 pt-1 mb-0">
                     Đã có tài khoản? <a href="../Home/Login" class="link">Đăng nhập</a>

@@ -43,7 +43,6 @@ namespace MultimediaService.Services
             }
             catch (Exception ex)
             {
-                // Log exception
                 Debug.WriteLine("Exception: " + ex.Message);
                 return false;
             }
@@ -91,13 +90,11 @@ namespace MultimediaService.Services
 
                         if (process.ExitCode != 0)
                         {
-                            // Log error
                             Debug.WriteLine("FFmpeg Error: " + stdError.ToString());
                             return;
                         }
                     }
 
-                    // Replace the original file with the new file containing metadata
                     System.IO.File.Delete(filePath);
                     System.IO.File.Move(tempFilePath, filePath);
                 }
@@ -111,7 +108,7 @@ namespace MultimediaService.Services
         }
         public static void CompressImage(string inputPath, string outputPath)
         {
-            var arguments = $"-i \"{inputPath}\" -qscale:v 2 \"{outputPath}\"";
+            var arguments = $"-i \"{inputPath}\" -qscale:v 20 \"{outputPath}\"";
 
             var processStartInfo = new ProcessStartInfo
             {

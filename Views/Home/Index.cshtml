@@ -27,15 +27,22 @@
             border-radius: 10px;
         }
 
+        .message-time{
+            font-size: 12px;
+            color: #6c757d !important;
+        }
+
             .message.sent {
-                background-color: #d1ffd6;
+                /* background-color: #d1ffd6; */
+                background-color: #1eff0066;
                 align-self: flex-start;
+                text-align: left;
             }
 
             .message.received {
                 background-color: #e8e8e8;
                 align-self: flex-end;
-                text-align: left;
+                text-align: right;
             }
 
             .message img, .message video {
@@ -46,19 +53,24 @@
             }
 
         .modal-header {
-            margin-top: 70px; /* Adjust based on your fixed header height */
+            margin-top: 70px; 
+        }
+
+        .user-item.active .text-muted {
+            color: #FFF !important;
         }
     </style>
 </head>
 <body>
     <div class="container ">
         <div class="row">
+            <!--Messages-->
             <div class="col-md-9">
                 <div class="">
                     <h5 class="modal-title" id="chatModalLabel"> <span id="chatUser"></span></h5>
                     <h2>Messages</h2>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="display:none;" id="messageBox">
                     <!-- Chat content goes here -->
                     <div id="chatContent" style="height: 70vh; overflow-y: auto;">
                         <div id="message-container">
@@ -85,6 +97,7 @@
                     <input type="hidden" id="FileType" value="" />
                 </div>
             </div>
+            <!--UserList-->
             <div class="col-md-3">
                 <div class="position-fixed" style="top: 70px; width: 25%;">
                     @if (Model != null && Model.Users != null)
@@ -97,7 +110,7 @@
                                 {
                                     <a href="#" data-id="@user.Id" class="list-group-item list-group-item-action user-item" >
                                         <div class="d-flex w-100 justify-content-between">
-                                            <h5 class="mb-1">@user.Username</h5>
+                                            <h5 class="mb-1">@user.FullName</h5>
                                         </div>
                                         <small class="text-muted">Tham gia vào: @user.CreatedAt.ToString("dd MMMM, yyyy")</small>
                                     </a>
@@ -174,6 +187,8 @@
 
                     var inputElement = document.getElementById("ReceiveId");
                     inputElement.value = userId;
+                    var messageBox = document.getElementById("messageBox");
+                    messageBox.style.display = "block";
                     document.getElementById("ReceiveIdFile").value = userId;
                     currentChatUserId = userId;
                     currentMessageCount = 0; // Reset message count when switching users

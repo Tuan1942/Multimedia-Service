@@ -26,32 +26,42 @@ namespace MultimediaService.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var client = _httpClientFactory.CreateClient();
-
-            var token = _httpContextAccessor.HttpContext.Request.Cookies["jwtToken"];
-            if (!string.IsNullOrEmpty(token))
+            try
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            }
-            var url = Url.Action("List", "User", new { }, Request.Scheme);
+                var client = _httpClientFactory.CreateClient();
 
-            var response = await client.GetAsync(url);
-            if (response.IsSuccessStatusCode)
+                var token = _httpContextAccessor.HttpContext.Request.Cookies["jwtToken"];
+                if (!string.IsNullOrEmpty(token))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+                var url = Url.Action("List", "User", new { }, Request.Scheme);
+
+                var response = await client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var userListJson = await response.Content.ReadAsStringAsync();
+                    var userList = JsonConvert.DeserializeObject<List<User>>(userListJson);
+
+                    // Remove the current logged-in user from the list
+                    var currentUser = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                    var filteredUserList = userList.Where(u => u.Id.ToString() != currentUser).ToList();
+                    ViewBag.UserID = currentUser;
+                    return View(new Home
+                    {
+                        Users = filteredUserList,
+                        HttpContextAccessor = _httpContextAccessor
+                    });
+                }
+                else
+                {
+                    return Redirect("/Home/Login");
+                }
+            }
+            catch (Exception)
             {
-                var userListJson = await response.Content.ReadAsStringAsync();
-                var userList = JsonConvert.DeserializeObject<List<User>>(userListJson);
-
-                // Remove the current logged-in user from the list
-                var currentUser = _httpContextAccessor.HttpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-                var filteredUserList = userList.Where(u => u.Id.ToString() != currentUser).ToList();
-                ViewBag.UserID = currentUser;
-                return View(new Home { 
-                    Users = filteredUserList, 
-                    HttpContextAccessor = _httpContextAccessor 
-                });
+                return Redirect("/Home/Login");
             }
-
-            return View(new Home());
         }
         public IActionResult Login()
         {
@@ -74,6 +84,26 @@ namespace MultimediaService.Controllers
 
         public IActionResult Audio()
         {
+            return View();
+        }
+        public async Task<IActionResult> AccountAsync()
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            var token = _httpContextAccessor.HttpContext.Request.Cookies["jwtToken"];
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+            var url = Url.Action("Current", "User", new { }, Request.Scheme);
+
+            var response = await client.GetAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                var userJson = await response.Content.ReadAsStringAsync();
+                var user = JsonConvert.DeserializeObject<User>(userJson);
+                return View(new AccountModel(user));
+            }
             return View();
         }
 
