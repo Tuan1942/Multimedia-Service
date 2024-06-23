@@ -3,13 +3,6 @@ A chat website, allowing the sending of multimedia files. It leverages ASP.NET C
   
 User Authentication:  
 User registration, login, and logout functionalities secured with JWT tokens.  
-Example User in MutimediaServiceDatabase:  
-	Account	Password
-	user1 	123456  
-	user2 	123456  
-	user3 	123456  
-	user4 	123456  
-	user5 	123456  
   
 Media Management:  
 Upload, compress, and retrieve images, audio, and video files.  
@@ -32,6 +25,8 @@ API Endpoints:
   /user/register: Register a new user.  
   /user/login: Authenticate a user and generate a token.  
   /user/logout: Logout a user.  
+  /user/current: Get current logged in user information.  
+  /user/list: Get all user in database.  
   
   Image Management:  
   /image/upload: Upload an image, compress it, and store both versions.  
@@ -52,7 +47,10 @@ API Endpoints:
 FFmpeg used: https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z  
 
 Database Configuration:
-Update appsettings.json with your SQL Server connection string.
+Update appsettings.json with your SQL Server connection string.  
+Rebuild solution  
 Run following command at Nuget Package Manager Console:  
 dotnet ef database update --context "MultimediaContext"  
 dotnet ef database update --context "UserContext"  
+
+Demo video:  https://drive.google.com/file/d/1-2b8oeDvOnLlQntrNaQmenXF-WMdfibZ/view?usp=sharing
